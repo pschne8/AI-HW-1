@@ -1,3 +1,73 @@
+//Problem #1:
+
+function GOAL-BASED-AGENT(percept) returns an action
+    state <- UPDATE-STATE(state, percept)
+    if goal is achieved in state then return STOP
+    if plan is empty then
+        plan <- FORMULATE-PLAN(state, goal, model)
+        if plan is empty then return STOP
+    action <- first action of plan
+    plan <- rest of plan
+    return action
+
+function UPDATE-STATE(state, percept) returns a state
+    return percept
+
+function FORMULATE-PLAN(state, goal, model) returns a plan
+    // This function formulates a plan to achieve the given goal from the current state using the provided model
+    return BASIC-PLAN(state, goal, model)
+
+function BASIC-PLAN(state, goal, model) returns a plan
+    // This function uses a basic planning algorithm to formulate a plan
+    frontier <- a queue data structure with state as the only element
+    explored <- an empty set
+    while frontier is not empty do
+        state <- POP(frontier)
+        if goal is achieved in state then return RECONSTRUCT-PATH(state)
+        add state to explored
+        for each action in POSSIBLE-ACTIONS(state) do
+            child <- RESULT(state, action, model)
+            if child is not in explored or frontier then
+                add child to frontier
+    return failure
+
+function RECONSTRUCT-PATH(state) returns a sequence of actions
+    // This function reconstructs the sequence of actions leading to the given state
+    sequence <- an empty sequence
+    while state has a parent do
+        add action from state to sequence
+        state <- parent of state
+    return reverse(sequence)
+
+
+
+
+//Problem #2:
+
+
+a) State space:
+The state space consists of all possible configurations of the two friends in different cities on the map.
+
+b) Initial state:
+The initial state is the configuration where each friend is in their respective starting city.
+
+c) Goal state/goal test:
+The goal state is any configuration where both friends are in the same city, indicating that they have met.
+
+d) Transition model/successor function:
+The transition model defines how the state changes when an action is taken. In this case, the successor function generates all possible states that can be reached from the current state by moving each friend to a neighboring city.
+
+e) Action cost function:
+The action cost function assigns a cost to each action, which is equal to the road distance between the current city and the neighboring city being moved to.
+
+
+With these definitions, we can apply search algorithms such as breadth-first search, depth-first search, A*, etc., to find the optimal path for the two friends to meet as quickly as possible.
+
+
+
+//Problem #3:
+
+
 from search import PriorityQueue, memoize, Node
 
 def best_first_graph_search(problem, f):
@@ -127,3 +197,4 @@ if iterations is not None:
     print("Minimum cost to reach goal state:", node.path_cost)
 else:
     print("No path to goal state found.")
+
